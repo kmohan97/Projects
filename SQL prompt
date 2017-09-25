@@ -1,0 +1,135 @@
+//stud5(roll,name);
+import java.io.*;
+import java.util.*;
+import java.sql.*;
+import java.lang.String.*;
+import java.text.*;
+
+public class prompt
+{
+static int k;
+public static void main(String asd[])
+{
+
+try{
+Scanner ss=new Scanner(System.in);
+
+Class.forName("oracle.jdbc.driver.OracleDriver");
+Connection cn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","system","manager");
+Statement st=cn.createStatement(1005,1008);
+while(true)
+{
+int p=0;
+//boolean b;
+System.out.print("SQL>");
+String query=ss.nextLine();
+if(query.equals(""))
+{
+}
+else
+{
+int l=query.length();
+String s=query.substring(0,l-1);
+//System.out.println(s);
+
+boolean b=st.execute(s);
+
+if(b)
+{
+ResultSet rs=st.getResultSet();
+ResultSetMetaData rsmd=rs.getMetaData();
+
+
+int i=rsmd.getColumnCount();
+//System.out.println("col are:-"+i);
+//int m=1;
+//int l=i;
+int h=1;
+while(h<=i)
+{
+System.out.print(rsmd.getColumnName(h)+"\t\t\t");
+h++;
+}
+//System.out.println("\n");
+while(rs.next())
+{
+System.out.println("");
+int j=1;
+while(j<=i)
+{
+String q=rsmd.getColumnTypeName(j);
+
+if(q.equals("NUMBER"))
+{
+//while(rs.next())
+
+System.out.print(rs.getInt(j)+"\t\t\t");
+}
+else if(q.equals("VARCHAR2"))
+{
+System.out.print(rs.getString(j)+"\t\t\t");
+}
+else if(q.equals("DATE"))
+{
+java.sql.Date sqdob=rs.getDate(j);
+java.util.Date udob=(java.util.Date)sqdob;
+SimpleDateFormat sdf1=new SimpleDateFormat("dd-MM-yyyy");
+String dob=sdf1.format((java.sql.Date)udob);
+System.out.print(dob+"\t\t\t");
+
+}
+
+
+
+j++;
+}
+}
+System.out.println("");
+
+
+
+
+
+}
+else
+{
+
+String r=s.substring(0,6);
+
+String q=r.toUpperCase();
+
+if(q.equals("CREATE"))
+{
+
+System.out.println("\nTABLE CREATED");
+}
+else if(q.equals("INSERT"))
+System.out.println("\n1 ROW INSERTED");
+
+
+//k=st.getUpdateCount();
+//System.out.println(k+"times updated");
+//k++;
+
+
+
+}
+}
+}
+//st.close();
+//cn.close();
+}
+catch(ClassNotFoundException ce)
+{
+ce.printStackTrace();
+}
+catch(SQLException se)
+{
+se.printStackTrace();
+}
+catch(Exception qe)
+{
+qe.printStackTrace();
+}
+}
+}
